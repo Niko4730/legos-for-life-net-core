@@ -13,12 +13,12 @@ namespace InnoTech.LegosForLife.WebApi.Controllers
     public class AuthController : ControllerBase
     {
         [HttpPost]
-        public ActionResult<string> Login([FromBody] LoginDto dto)
+        public ActionResult<LoginDto> Login([FromBody] LoginDto dto)
         {   
             //Peters kode herunder
             if (dto.Username == "Obel" && dto.Password == "Password" )
             {
-                return Ok("token123");
+                return Ok(new LoginDto{Token = "token123"});
             }
             
             return Unauthorized();
