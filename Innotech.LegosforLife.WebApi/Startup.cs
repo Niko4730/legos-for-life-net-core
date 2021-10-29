@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 
 namespace InnoTech.LegosForLife.WebApi
@@ -22,7 +23,18 @@ namespace InnoTech.LegosForLife.WebApi
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Innotech.LegosforLife.WebApi", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "Innotech.LegosforLife.WebApi", Version = "v1"});
+            });
+            services.AddCors(options =>
+            {
+                options.AddPolicy("shop-cors",
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod();
+                    });
             });
         }
 
@@ -39,6 +51,8 @@ namespace InnoTech.LegosForLife.WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            
+            app.UseCors("shop-cors");
 
             app.UseAuthorization();
 
